@@ -4,4 +4,5 @@ package-lock.json
 node_modules
 tools
 !tools/.gitkeep
+!tools/sign-key.jks
 tmp
