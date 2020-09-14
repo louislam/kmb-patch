@@ -1,0 +1,6 @@
+# Created by .ignore support plugin (hsz.mobi)
+package-lock.json
+.idea
+node_modules
+tools
+!tools/.gitkeep
