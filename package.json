@@ -1,22 +1,29 @@
 {
-  "name": "kmb-apk-ads-remover",
+  "name": "kmb-patch",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "patch": "node_modules/.bin/ts-node index.ts"
+    "patch": "./node_modules/.bin/ts-node index.ts",
+    "install-apk" : "adb install patched-kmb.apk",
+    "backup-app-data" : "adb backup -f appdata.ab com.kmb.app1933",
+    "restore-app-data" : "adb restore appdata.ab"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@types/node": "^14.10.1",
     "axios": "^0.20.0",
+    "cheerio": "^1.0.0-rc.3",
     "del": "^5.1.0",
+    "extract-zip": "^2.0.1",
+    "glob": "^7.1.6",
     "progress": "^2.0.3",
-    "tempy": "^0.6.0"
-  },
-  "devDependencies": {
+    "tempy": "^0.6.0",
     "ts-node": "^9.0.0",
-    "typescript": "^4.0.2"
-  }
+    "typescript": "^4.0.2",
+    "xml2js": "^0.4.23",
+    "xml2js-xpath": "^0.11.0"
+  },
+  "devDependencies": {}
 }
