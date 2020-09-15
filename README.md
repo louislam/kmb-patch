@@ -2,9 +2,12 @@
 
 # Description
 
+已測試版本: 1.6.6
+
 1. 略過 Splash Screen，快速啟動。
 2. 移除廣告。
 3. Open Source 自助修補，APK 唔怕俾壞人加料 。
+4. 可備份原版 App Data 。
 
 ## Motivation
 
