@@ -9,6 +9,14 @@
 3. Open Source 自助修補，APK 唔怕俾壞人加料 。
 4. 可備份原版 App Data 。
 
+
+# Demo
+
+影片示範，使用 KMB Patch 後，幾咁快同埋幾乾淨。
+[(點擊播放)](https://youtu.be/hwvs_Z5rMbo)
+
+[<img src="https://img.youtube.com/vi/hwvs_Z5rMbo/0.jpg" width="30%">](https://youtu.be/hwvs_Z5rMbo)
+
 ## Motivation
 
 有時搭巴士，趕住想查下到站時間，或者想查下去某個地方搭咩車，點知隻APP啲廣告狂彈出嚟。😡 既然都會俾錢搭車，無理由仲要彈廣告擾民。佢又冇得付費移除廣告，又唔公開相關API。之後嬲嬲就研究下點整走啲廣告。
