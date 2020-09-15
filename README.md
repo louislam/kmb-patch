@@ -29,6 +29,14 @@
 1. 用你鍾意嘅方法，將 patched-kmb.apk 放入你部 Android 機，然後安裝。
 1. (ADB Only) 如要恢復備份，可執行 4-RestoreAppData.bat。
 
+
+
+### TLDR?
+
+```
+kmb.apk + 2-Patch.bat => patched_kmb.apk
+```
+
 ## Additional 
 
 * 由於 apk 已由另一條 Key 重新簽署，所以 Google Map API Key 都要同時換先用到。
