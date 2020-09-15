@@ -2,9 +2,12 @@
 
 # Description
 
+已測試版本: 1.6.6
+
 1. 略過 Splash Screen，快速啟動。
 2. 移除廣告。
 3. Open Source 自助修補，APK 唔怕俾壞人加料 。
+4. 可備份原版 App Data 。
 
 ## Motivation
 
@@ -22,18 +25,27 @@
 
 1. 安裝 Node.js
 1. (ADB Only) 如需要備份 Bookmark 等資料，可先把 Android 手機連接到 PC，再執行 1-BackupAppData.bat 。
-1. 下載這個程式，並解壓縮。
-1. 匯出原版 APK，或到可信的網站下載，例如 https://apkpure.com/app-1933-kmb-lwb/com.kmb.app1933 ，把檔案命名就 kmb.apk，然後放到同一資料夾下。
+1. 下載這個程式 https://github.com/louislam/kmb-patch/archive/1.0.zip ，並解壓縮。
+1. 進入資料夾，執行 0-Setup.bat 或 npm install 。
+1. 匯出原版 APK，或到可信的網站下載，例如 https://apkpure.com/app-1933-kmb-lwb/com.kmb.app1933 ，把檔案命名為 kmb.apk，然後放到同一資料夾下。
 1. 執行 2-Patch.bat，成功後，會生成 patched-kmb.apk 。
 1. 喺你部 Android 機刪除原版 KMB App 。
 1. 用你鍾意嘅方法，將 patched-kmb.apk 放入你部 Android 機，然後安裝。
 1. (ADB Only) 如要恢復備份，可執行 4-RestoreAppData.bat。
 
+
+
+### TLDR?
+
+```
+kmb.apk + 2-Patch.bat => patched_kmb.apk
+```
+
 ## Additional 
 
 * 由於 apk 已由另一條 Key 重新簽署，所以 Google Map API Key 都要同時換先用到。
 * 有興趣了解更多設定或修補過程，可以打開 kmb-patch.ts 研究研究。
-* 如已裝 java runtime，理論上應該都支援 Linux，不過我未試過。
+* 如已裝 Java runtime，理論上應該都支援 Linux，不過我未試過。
 
 ## License
 
