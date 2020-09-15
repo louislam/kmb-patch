@@ -19,18 +19,22 @@ export class KMBPatch {
     public outputAPK : string;
     public tempDir : string;
     public forceOverwrite = true;
-    public mapKey = "AIzaSyAtzcktS1_oTA8ryupWv1jpCBQrYF3GURk";
+    public mapKey = "";
 
     public signKey = "tools/sign-key.jks";
-    public keystorePassword = "CnhQbngu8aLFVR6rHGs6zkoryZcJVeDF";
+    public keystorePassword = "";
     public keyAlias = "louislam";
-    public keyPassword = "CnhQbngu8aLFVR6rHGs6zkoryZcJVeDF";
+    public keyPassword = "";
 
     public downloadJava = true;
     public java = '"tools/jdk-11.0.8+10-jre/bin/java"';
 
 
     constructor(inputAPK : string, outputAPK = "patched-kmb.apk", tempDir = "tmp") {
+        this.mapKey = new Buffer("QUl6YVN5QXR6Y2t0UzFfb1RBOHJ5dXBXdjFqcENCUXJZRjNHVVJr", 'base64').toString('utf8');
+        this.keystorePassword = new Buffer("Q25oUWJuZ3U4YUxGVlI2ckhHczZ6a29yeVpjSlZlREY=", 'base64').toString('utf8');
+        this.keyPassword = this.keystorePassword;
+
         this.inputAPK = inputAPK;
         this.outputAPK = outputAPK;
 
@@ -307,7 +311,6 @@ export class KMBPatch {
                     let stat = fs.statSync("tools/_manifest");
                     let manifestStream = fs.createReadStream("tools/_manifest");
                     header.size = stat.size;
-                    console.log(header);
                     manifestStream.pipe(pack.entry(header, callback))
                 } else {
                     stream.pipe(pack.entry(header, callback))
