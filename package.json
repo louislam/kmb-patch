@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "patch": "./node_modules/.bin/ts-node index.ts",
-    "install-apk" : "adb install patched-kmb.apk",
-    "backup-app-data" : "adb backup -f appdata.ab com.kmb.app1933",
-    "restore-app-data" : "adb restore appdata.ab"
+    "install-apk": "adb install patched-kmb.apk",
+    "backup-app-data": "adb backup -f appdata.ab com.kmb.app1933",
+    "restore-app-data": "./node_modules/.bin/ts-node index.ts restore"
   },
   "author": "",
   "license": "ISC",
@@ -19,11 +19,10 @@
     "extract-zip": "^2.0.1",
     "glob": "^7.1.6",
     "progress": "^2.0.3",
+    "tar-stream": "^2.1.4",
     "tempy": "^0.6.0",
     "ts-node": "^9.0.0",
-    "typescript": "^4.0.2",
-    "xml2js": "^0.4.23",
-    "xml2js-xpath": "^0.11.0"
+    "typescript": "^4.0.2"
   },
   "devDependencies": {}
 }

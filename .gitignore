@@ -1,8 +1,14 @@
 # Created by .ignore support plugin (hsz.mobi)
 package-lock.json
-.idea
-node_modules
-tools
-!tools/.gitkeep
-!tools/sign-key.jks
-tmp
+/.idea
+/node_modules
+
+/tools/*
+!/tools/sign-key.jks
+!/tools/_manifest
+
+/tmp
+
+kmb.apk
+patched-kmb.apk
+*.ab

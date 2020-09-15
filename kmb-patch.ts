@@ -9,13 +9,17 @@ const ProgressBar = require('progress');
 const extract = require("extract-zip");
 const cheerio = require('cheerio');
 const glob = require("glob");
+const tar = require('tar-stream');
 
+/**
+ * KMB Patch Class
+ */
 export class KMBPatch {
     public inputAPK : string;
     public outputAPK : string;
     public tempDir : string;
     public forceOverwrite = true;
-    public mapKey = "aaaaaaa";
+    public mapKey = "AIzaSyAtzcktS1_oTA8ryupWv1jpCBQrYF3GURk";
 
     public signKey = "tools/sign-key.jks";
     public keystorePassword = "CnhQbngu8aLFVR6rHGs6zkoryZcJVeDF";
@@ -45,7 +49,10 @@ export class KMBPatch {
         }
     }
 
-    async run() {
+    /**
+     * Patch the apk
+     */
+    async patch() {
         let exitCode = 0;
         let self = this;
 
@@ -195,15 +202,22 @@ export class KMBPatch {
         return exitCode;
     }
 
+    /**
+     * Download all tools
+     */
     async downloadTools() {
         console.log("Download Tools");
 
         if (! fs.existsSync("tools/apktool_2.4.1.jar")) {
-            await this.downloadFile("https://github.com/iBotPeaches/Apktool/releases/download/v2.4.1/apktool_2.4.1.jar", "apktool_2.4.1.jar")
+            await this.downloadFile("https://github.com/iBotPeaches/Apktool/releases/download/v2.4.1/apktool_2.4.1.jar", "apktool_2.4.1.jar");
         }
 
         if (! fs.existsSync("tools/uber-apk-signer-1.1.0.jar")) {
-            await this.downloadFile("https://github.com/patrickfav/uber-apk-signer/releases/download/v1.1.0/uber-apk-signer-1.1.0.jar", "uber-apk-signer-1.1.0.jar")
+            await this.downloadFile("https://github.com/patrickfav/uber-apk-signer/releases/download/v1.1.0/uber-apk-signer-1.1.0.jar", "uber-apk-signer-1.1.0.jar");
+        }
+
+        if (! fs.existsSync("tools/abe.jar")) {
+            await this.downloadFile("https://github.com/nelenkov/android-backup-extractor/releases/download/20181012025725-d750899/abe-all.jar", "abe.jar")
         }
 
         // JRE Download link from https://adoptopenjdk.net/archive.html
@@ -218,6 +232,7 @@ export class KMBPatch {
     }
 
     /**
+     * Download a file
      * Copy from https://futurestud.io/tutorials/axios-download-progress-in-node-js
      */
     async downloadFile(url, filename) {
@@ -257,6 +272,74 @@ export class KMBPatch {
 
     }
 
+    /**
+     * Restore and patch the appdata.ab
+     */
+    async restore() {
+        try {
+            if (! fs.existsSync("tmp")) {
+                fs.mkdirSync("tmp");
+            }
+
+            if (! fs.existsSync("tmp/appdata")) {
+                fs.mkdirSync("tmp/appdata");
+            }
+
+            if (! fs.existsSync("appdata.ab")) {
+                throw "appdata.ab not found";
+            }
+
+            console.log("Patching backup")
+
+            execSync(`${this.java} -jar tools/abe.jar unpack appdata.ab tmp/appdata.tar`);
+
+            // Stream is fun
+            // oldTarballStream -> extract (Stream) -> only replace "_manifest" -> pack (Stream) -> newTarballStream
+
+            let oldTarballStream = fs.createReadStream("tmp/appdata.tar");
+            let newTarballStream = fs.createWriteStream("tmp/patched-appdata.tar");
+
+            var pack = tar.pack();
+            var extract = tar.extract();
+
+            extract.on('entry', function(header, stream, callback) {
+                if (header.name == "apps/com.kmb.app1933/_manifest") {
+                    let stat = fs.statSync("tools/_manifest");
+                    let manifestStream = fs.createReadStream("tools/_manifest");
+                    header.size = stat.size;
+                    console.log(header);
+                    manifestStream.pipe(pack.entry(header, callback))
+                } else {
+                    stream.pipe(pack.entry(header, callback))
+                }
+            })
+
+            extract.on('finish', function () {
+                pack.finalize()
+            })
+
+            await new Promise((resolve) => {
+                newTarballStream.on("finish", function () {
+                    newTarballStream.end();
+                    resolve();
+                });
+
+                oldTarballStream.pipe(extract);
+                pack.pipe(newTarballStream);
+            });
+
+            execSync(`${this.java} -jar tools/abe.jar pack tmp/patched-appdata.tar patched-appdata.ab`);
+
+            console.log("Connect your phone to your PC and accept restore");
+            execSync(`adb restore patched-appdata.ab`);
+
+        } catch (error) {
+            console.error(error.message);
+            return 1;
+        }
+
+        return 0;
+    }
 }
 
 function escapeShellArg(arg) {
