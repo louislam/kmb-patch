@@ -31,8 +31,8 @@ export class KMBPatch {
 
 
     constructor(inputAPK : string, outputAPK = "patched-kmb.apk", tempDir = "tmp") {
-        this.mapKey = new Buffer("QUl6YVN5QXR6Y2t0UzFfb1RBOHJ5dXBXdjFqcENCUXJZRjNHVVJr", 'base64').toString('utf8');
-        this.keystorePassword = new Buffer("Q25oUWJuZ3U4YUxGVlI2ckhHczZ6a29yeVpjSlZlREY=", 'base64').toString('utf8');
+        this.mapKey = Buffer.from("QUl6YVN5QXR6Y2t0UzFfb1RBOHJ5dXBXdjFqcENCUXJZRjNHVVJr", 'base64').toString('utf8');
+        this.keystorePassword = Buffer.from("Q25oUWJuZ3U4YUxGVlI2ckhHczZ6a29yeVpjSlZlREY=", 'base64').toString('utf8');
         this.keyPassword = this.keystorePassword;
 
         this.inputAPK = inputAPK;
