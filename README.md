@@ -25,8 +25,8 @@
 
 ## Requirements
 
-* [Windows](https://nodejs.org/dist/v12.18.3/node-v12.18.3-x64.msi) (64bit)
-* Node.js 12.0
+* Windows (64bit)
+* [Node.js](https://nodejs.org/dist/v12.18.3/node-v12.18.3-x64.msi) 12.0 或以上
 * [ADB](https://dl.google.com/android/repository/platform-tools-latest-windows.zip) (如不需要備份 App Data，可不用)
 
 ## How to use
