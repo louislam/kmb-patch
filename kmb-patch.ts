@@ -46,8 +46,9 @@ export class KMBPatch {
         }
 
         console.log("Temp Dir: " + this.tempDir);
+        console.log("OS: " + os.platform());
 
-        if (os.platform !== "win32") {
+        if (os.platform() !== "win32") {
             this.downloadJava = false;
             this.java = "java";
         }
