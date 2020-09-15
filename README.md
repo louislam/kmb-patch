@@ -1,6 +1,6 @@
 # KMB Patch for Android APK
 
-# Description
+## Description
 
 已測試版本: 1.6.6
 
@@ -8,6 +8,14 @@
 2. 移除廣告。
 3. Open Source 自助修補，APK 唔怕俾壞人加料 。
 4. 可備份原版 App Data 。
+
+
+## Demo
+
+影片示範，使用 KMB Patch 後，幾咁快同埋幾乾淨。
+[(點擊播放)](https://youtu.be/hwvs_Z5rMbo)
+
+[<img src="https://img.youtube.com/vi/hwvs_Z5rMbo/0.jpg" width="30%">](https://youtu.be/hwvs_Z5rMbo)
 
 ## Motivation
 
@@ -18,8 +26,8 @@
 ## Requirements
 
 * Windows (64bit)
-* Node.js 12.0
-* ADB (如不需要備份 App Data，可不用)
+* [Node.js](https://nodejs.org/dist/v12.18.3/node-v12.18.3-x64.msi) 12.0 或以上
+* [ADB](https://dl.google.com/android/repository/platform-tools-latest-windows.zip) (如不需要備份 App Data，可不用)
 
 ## How to use
 
