@@ -13,9 +13,9 @@
 # Demo
 
 影片示範，使用 KMB Patch 後，幾咁快同埋幾乾淨。
-[(點擊播放)](https://youtu.be/hwvs_Z5rMbo)
+[(點擊播放)](https://youtu.be/hwvs_Z5rMbo){:target="_blank"}
 
-[<img src="https://img.youtube.com/vi/hwvs_Z5rMbo/0.jpg" width="30%">](https://youtu.be/hwvs_Z5rMbo)
+[<img src="https://img.youtube.com/vi/hwvs_Z5rMbo/0.jpg" width="30%">](https://youtu.be/hwvs_Z5rMbo){:target="_blank"}
 
 ## Motivation
 
