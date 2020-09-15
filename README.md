@@ -23,7 +23,7 @@
 1. 安裝 Node.js
 1. (ADB Only) 如需要備份 Bookmark 等資料，可先把 Android 手機連接到 PC，再執行 1-BackupAppData.bat 。
 1. 下載這個程式，並解壓縮。
-1. 匯出原版 APK，或到可信的網站下載，例如 https://apkpure.com/app-1933-kmb-lwb/com.kmb.app1933 ，把檔案命名就 kmb.apk，然後放到同一資料夾下。
+1. 匯出原版 APK，或到可信的網站下載，例如 https://apkpure.com/app-1933-kmb-lwb/com.kmb.app1933 ，把檔案命名為 kmb.apk，然後放到同一資料夾下。
 1. 執行 2-Patch.bat，成功後，會生成 patched-kmb.apk 。
 1. 喺你部 Android 機刪除原版 KMB App 。
 1. 用你鍾意嘅方法，將 patched-kmb.apk 放入你部 Android 機，然後安裝。
