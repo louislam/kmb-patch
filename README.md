@@ -37,7 +37,7 @@
 * 已安裝 Java
 * 已安裝 Node.js 12 或以上
 
-(已測試 Ubuntu 19.10 )
+(已測試 Ubuntu 19.10)
 
 
 ## How to use
