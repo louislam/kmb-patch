@@ -64,7 +64,6 @@ kmb.apk + 2-Patch.bat => patched_kmb.apk
 
 * 由於 apk 已由另一條 Key 重新簽署，所以 Google Map API Key 都要同時換先用到。
 * 有興趣了解更多設定或修補過程，可以打開 kmb-patch.ts 研究研究。
-* 如已裝 Java runtime，理論上應該都支援 Linux，不過我未試過。
 
 ## License
 
