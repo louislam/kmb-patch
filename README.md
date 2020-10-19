@@ -25,14 +25,25 @@
 
 ## Requirements
 
-* Windows (64bit)
+### Windows (64bit) 
+
 * [Node.js](https://nodejs.org/dist/v12.18.3/node-v12.18.3-x64.msi) 12.0 或以上
 * [ADB](https://dl.google.com/android/repository/platform-tools-latest-windows.zip) (如不需要備份 App Data，可不用)
+
+### Linux 
+
+可生成APK，但未知可否用備份功能。
+
+* 已安裝 Java
+* 已安裝 Node.js 12 或以上
+
+(已測試 Ubuntu 19.10)
+
 
 ## How to use
 
 1. 安裝 Node.js
-1. 下載這個程式 https://github.com/louislam/kmb-patch/archive/1.1.zip ，並解壓縮。
+1. 下載這個程式 https://github.com/louislam/kmb-patch/archive/1.2.zip ，並解壓縮。
 1. 進入資料夾，執行 0-Setup.bat 或 npm install 。
 1. (ADB Only) 如需要備份 Bookmark 等資料，可先把 Android 手機連接到 PC，再執行 1-BackupAppData.bat 。
 1. 匯出原版 APK，或到可信的網站下載，例如 https://apkpure.com/app-1933-kmb-lwb/com.kmb.app1933 ，把檔案命名為 kmb.apk，然後放到同一資料夾下。
@@ -53,7 +64,6 @@ kmb.apk + 2-Patch.bat => patched_kmb.apk
 
 * 由於 apk 已由另一條 Key 重新簽署，所以 Google Map API Key 都要同時換先用到。
 * 有興趣了解更多設定或修補過程，可以打開 kmb-patch.ts 研究研究。
-* 如已裝 Java runtime，理論上應該都支援 Linux，不過我未試過。
 
 ## License
 
