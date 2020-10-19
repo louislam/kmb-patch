@@ -145,9 +145,9 @@ export class KMBPatch {
                     let line = lines[j];
 
                     // Disable check update
-                    if (line.includes("m.kmb.hk/kmb-ws/checkupdateapp.php")) {
-                        console.log("Remove update url in " + filename);
-                        lines[j] = line.replace("m.kmb.hk/kmb-ws/checkupdateapp.php", "m2.kmb.hk/kmb-ws/checkupdateapp.php");
+                    if (line.includes(", 0x2712")) {
+                        console.log("Remove force update in " + filename);
+                        lines[j] = line.replace(", 0x2712", ", 0x2760");
                         updated = true;
                     }
 
