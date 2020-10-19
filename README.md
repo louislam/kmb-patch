@@ -9,6 +9,9 @@
 3. Open Source 自助修補，APK 唔怕俾壞人加料 。
 4. 可備份原版 App Data 。
 
+## Changlog
+
+(2020-10-19) 防止強制更新警告
 
 ## Demo
 
@@ -43,7 +46,7 @@
 ## How to use
 
 1. 安裝 Node.js
-1. 下載這個程式 https://github.com/louislam/kmb-patch/archive/1.2.zip ，並解壓縮。
+1. 下載這個程式 https://github.com/louislam/kmb-patch/archive/1.3.zip ，並解壓縮。
 1. 進入資料夾，執行 0-Setup.bat 或 npm install 。
 1. (ADB Only) 如需要備份 Bookmark 等資料，可先把 Android 手機連接到 PC，再執行 1-BackupAppData.bat 。
 1. 匯出原版 APK，或到可信的網站下載，例如 https://apkpure.com/app-1933-kmb-lwb/com.kmb.app1933 ，把檔案命名為 kmb.apk，然後放到同一資料夾下。
