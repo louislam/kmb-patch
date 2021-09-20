@@ -1,5 +1,4 @@
 const tempy = require('tempy');
-const del = require('del');
 const {execSync} = require('child_process');
 const os = require('os');
 const fs = require('fs');
@@ -63,6 +62,10 @@ export class KMBPatch {
 
         try {
             await this.downloadTools();
+
+            fs.rmdirSync(this.tempDir, {
+                recursive: true
+            });
 
             let escapedTempDir = escapeShellArg(this.tempDir);
             let escapedInputAPK = escapeShellArg(this.inputAPK);
@@ -200,8 +203,8 @@ export class KMBPatch {
             exitCode = 1;
         }
 
-        del.sync(this.tempDir , {
-            force : true,
+        fs.rmdirSync(this.tempDir, {
+            recursive: true
         });
 
         return exitCode;
@@ -266,7 +269,7 @@ export class KMBPatch {
 
 
 
-        await new Promise((resolve) => {
+        await new Promise<void>((resolve) => {
             writer.on("finish", () => {
                 console.log("Downloaded and renamed to " + filename);
                 resolve();
@@ -322,7 +325,7 @@ export class KMBPatch {
                 pack.finalize()
             })
 
-            await new Promise((resolve) => {
+            await new Promise<void>((resolve) => {
                 newTarballStream.on("finish", function () {
                     newTarballStream.end();
                     resolve();
