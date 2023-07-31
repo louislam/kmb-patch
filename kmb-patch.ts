@@ -186,6 +186,19 @@ export class KMBPatch {
                         updated = true;
                     }
 
+                    // Remove InterstitialAd
+                    // Smali: InterstitialAd;->load ==== JAVA: InterstitialAd.load(...)
+                    if (line.includes("InterstitialAd;->load")) {
+                        console.log("Remove InterstitialAd code in " + filename);
+                        lines[j] = "#" + line;
+
+                        // Also comment previous line if is .line
+                        if (lines[j - 1].trim().startsWith(".line")) {
+                            lines[j - 1] = "#" + lines[j - 1];
+                        }
+
+                        updated = true;
+                    }
                 }
 
                 if (updated) {
