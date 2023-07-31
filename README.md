@@ -3,9 +3,12 @@
 ## Description
 
 已測試版本: 
-  * 1.8.2 可用 (2021-09-20)
-  * 1.6.8 可用
-  * 1.6.6 可用
+  * 2.0.5 可用 (2023-07-31)
+  * 1.9.2 可用
+  * 1.8.2 可用
+  * 1.7.9 可用
+  * ~~1.6.8 可用~~ (1.7.8 及更舊版本無法獲取路線資料更新)
+  * ~~1.6.6 可用~~
 
 1. 略過 Splash Screen，快速啟動。
 2. 移除廣告。
@@ -49,21 +52,21 @@
 ## How to use
 
 1. 安裝 Node.js
-1. 下載這個程式 https://github.com/louislam/kmb-patch/archive/1.3.1.zip ，並解壓縮。
-1. 進入資料夾，執行 0-Setup.bat 或 npm install 。
-1. (ADB Only) 如需要備份 Bookmark 等資料，可先把 Android 手機連接到 PC，再執行 1-BackupAppData.bat 。
-1. 匯出原版 APK，或到可信的網站下載，例如 https://apkpure.com/app-1933-kmb-lwb/com.kmb.app1933 ，把檔案命名為 kmb.apk，然後放到同一資料夾下。
-1. 執行 2-Patch.bat，成功後，會生成 patched-kmb.apk 。
-1. 喺你部 Android 機刪除原版 KMB App 。
-1. 用你鍾意嘅方法，將 patched-kmb.apk 放入你部 Android 機，然後安裝。
-1. (ADB Only) 如要恢復備份，可執行 4-RestoreAppData.bat。
+2. 下載這個程式 https://github.com/louislam/kmb-patch/archive/1.3.1.zip ，並解壓縮。
+3. 進入資料夾，執行 0-Setup.bat 或 npm install 。
+4. (ADB Only) 如需要備份 Bookmark 等資料，可先把 Android 手機連接到 PC，再執行 1-BackupAppData.bat 。
+5. 匯出原版 APK，或到可信的網站下載，例如 https://apkpure.com/app-1933-kmb-lwb/com.kmb.app1933 ，把檔案命名為 kmb.apk，然後放到同一資料夾下。
+6. 執行 2-Patch.bat，成功後，會生成 patched-kmb.apk 。
+7. 喺你部 Android 機刪除原版 KMB App 。
+8. 用你鍾意嘅方法，將 patched-kmb.apk 放入你部 Android 機，然後安裝。
+9. (ADB Only) 如要恢復備份，可執行 4-RestoreAppData.bat。
 
 
 
 ### TLDR?
 
 ```
-kmb.apk + 2-Patch.bat => patched_kmb.apk
+kmb.apk + 2-Patch.bat => patched-kmb.apk
 ```
 
 ## Additional 

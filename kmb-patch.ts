@@ -63,13 +63,15 @@ export class KMBPatch {
         try {
             await this.downloadTools();
 
-            fs.rmdirSync(this.tempDir, {
-                recursive: true
-            });
+            if (fs.existsSync(this.tempDir)){
+                fs.rmSync(this.tempDir, {
+                    recursive: true
+                });
+            }
 
             let escapedTempDir = escapeShellArg(this.tempDir);
             let escapedInputAPK = escapeShellArg(this.inputAPK);
-            let escapedOutputAPK = escapeShellArg(this.outputAPK);
+            let escapedOutputAPK;
             let f = "";
 
             let escapedSignKey = escapeShellArg(this.signKey);
@@ -92,6 +94,10 @@ export class KMBPatch {
             let $ = cheerio.load(androidManifestXML,  {
                 xmlMode: true
             });
+
+            // Update outputAPK filename
+            this.outputAPK = `${this.outputAPK.split(".apk")[0]}-${$("manifest").attr("platformBuildVersionName")}.apk`;
+            escapedOutputAPK = escapeShellArg(this.outputAPK)
 
             // Update MAP Key
             $("application meta-data").each(function () {
@@ -203,9 +209,11 @@ export class KMBPatch {
             exitCode = 1;
         }
 
-        fs.rmdirSync(this.tempDir, {
-            recursive: true
-        });
+        if (fs.existsSync(this.tempDir)){
+            fs.rmSync(this.tempDir, {
+                recursive: true
+            });
+        }
 
         return exitCode;
     }
