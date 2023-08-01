@@ -220,11 +220,11 @@ export class KMBPatch {
                 for (let j = 0; j < lines.length; j++) {
                     let line = lines[j];
 
-                    // Remove Builtin Ads not working
+                    // Remove Builtin Ads
                     if (line.includes("https://app.kmb.hk/app1933/index.php")) {
                         console.log("Remove Builtin Ads in " + filename);
 
-                        // Keep finding `Lcom/mobilesoft/mybus/manager/m`, if found, add # at the beginning to comment it
+                        // Keep finding `/mybus/manager/m` (JAVA: mybus.manager.m(...)), if found, add # at the beginning to comment it
                         let k = j;
                         let foundTheCall = false;
 
