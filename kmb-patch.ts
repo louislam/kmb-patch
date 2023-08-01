@@ -95,9 +95,7 @@ export class KMBPatch {
                 xmlMode: true
             });
 
-            // Update outputAPK filename
-            this.outputAPK = `${this.outputAPK.split(".apk")[0]}-${$("manifest").attr("platformBuildVersionName")}.apk`;
-            escapedOutputAPK = escapeShellArg(this.outputAPK)
+            escapedOutputAPK = escapeShellArg(this.outputAPK);
 
             // Update MAP Key
             $("application meta-data").each(function () {
@@ -141,6 +139,7 @@ export class KMBPatch {
                 }
             }
 
+            // smali_classes2 folder
             let path = this.tempDir + '/smali_classes2/**/*.smali';
             fileList = glob.sync(path);
 
@@ -186,6 +185,64 @@ export class KMBPatch {
                         updated = true;
                     }
 
+                    // Remove InterstitialAd
+                    // Smali: InterstitialAd;->load ==== JAVA: InterstitialAd.load(...)
+                    if (line.includes("InterstitialAd;->load")) {
+                        console.log("Remove InterstitialAd code in " + filename);
+                        lines[j] = "#" + line;
+
+                        // Also comment previous line if is .line
+                        if (lines[j - 1].trim().startsWith(".line")) {
+                            lines[j - 1] = "#" + lines[j - 1];
+                        }
+
+                        updated = true;
+                    }
+
+
+                }
+
+                if (updated) {
+                    fs.writeFileSync(filename, lines.join(os.EOL));
+                }
+            }
+
+            // /smali/ folder
+            path = this.tempDir + '/smali/**/*.smali';
+            fileList = glob.sync(path);
+
+            for (let i = 0; i < fileList.length; i++) {
+                let updated = false;
+                let filename = fileList[i];
+                let text = fs.readFileSync(filename).toString();
+                let lines = text.split(/\r?\n/);
+
+                for (let j = 0; j < lines.length; j++) {
+                    let line = lines[j];
+
+                    // Remove Builtin Ads not working
+                    if (line.includes("https://app.kmb.hk/app1933/index.php")) {
+                        console.log("Remove Builtin Ads in " + filename);
+
+                        // Keep finding `Lcom/mobilesoft/mybus/manager/m`, if found, add # at the beginning to comment it
+                        let k = j;
+                        let foundTheCall = false;
+
+                        while (k >= 0 && k < lines.length) {
+                            if (lines[k].includes("/mybus/manager/m")) {
+                                lines[k] = "#" + lines[k];
+                                foundTheCall = true;
+                                break;
+                            }
+                            k++;
+                        }
+
+                        if (!foundTheCall) {
+                            console.error("Failed to remove Builtin Ads in " + filename);
+                        } else {
+                            updated = true;
+                        }
+                    }
                 }
 
                 if (updated) {
