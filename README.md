@@ -1,5 +1,7 @@
 # KMB Patch for Android APK
 
+(2025-07-26) Update: 舊版本的 KMB APP 已無法正常使用。而目前 2.3.23 亦都無法 Patch。因為隻 APP 已經重新寫過，並且係 React Native。由於目前 Disassembe/Assemble React Native 並不成熟，要 Patch 嘅難度大增。加上目前新版好似冇以前咁慢，廣告亦都冇以前咁痴線。因此呢個項目係時候完，謝謝支持。
+
 ## Description
 
 已測試版本: 
