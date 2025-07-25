@@ -10,13 +10,18 @@ if (process.argv.length == 3) {
     let remover = new KMBPatch("kmb.apk");
     let exitCode = 0;
 
-    if (action == "patch") {
-        exitCode = await remover.patch();
-    } else if (action == "restore") {
-        exitCode = await remover.restore();
-    } else {
-        console.error("Incorrect action");
-        exitCode = 1;
+    try {
+        if (action == "patch") {
+            exitCode = await remover.patch();
+        } else if (action == "restore") {
+            exitCode = await remover.restore();
+        } else {
+            console.error("Incorrect action");
+            exitCode = 1;
+        }
+    } catch (e) {
+        remover.cleanUp();
+        throw e;
     }
 
     process.exit(exitCode);

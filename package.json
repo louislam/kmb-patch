@@ -1,27 +1,28 @@
 {
-  "name": "kmb-patch",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "patch": "ts-node index.ts",
-    "install-apk": "adb install patched-kmb.apk",
-    "backup-app-data": "adb backup -f appdata.ab com.kmb.app1933",
-    "restore-app-data": "ts-node index.ts restore"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@types/node": "^14.10.1",
-    "axios": "^0.21.4",
-    "cheerio": "^1.0.0-rc.3",
-    "extract-zip": "^2.0.1",
-    "glob": "^7.1.7",
-    "progress": "^2.0.3",
-    "tar-stream": "^2.2.0",
-    "tempy": "^0.6.0",
-    "ts-node": "~9.1.1",
-    "typescript": "~4.0.8"
-  },
-  "devDependencies": {}
+    "name": "kmb-patch",
+    "version": "2.0.0",
+    "type": "module",
+    "main": "index.js",
+    "scripts": {
+        "patch": "tsx index.ts",
+        "install-apk": "adb install patched-kmb.apk",
+        "backup-app-data": "adb backup -f appdata.ab com.kmb.app1933",
+        "restore-app-data": "tsx index.ts restore"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "@types/glob": "^8.1.0",
+        "@types/progress": "^2.0.7",
+        "@types/tar-stream": "^3.1.4",
+        "@types/node": "^24.1.0",
+        "axios": "^1.11.0",
+        "cheerio": "^1.0.0-rc.3",
+        "extract-zip": "^2.0.1",
+        "glob": "^11.0.3",
+        "progress": "^2.0.3",
+        "tar-stream": "^3.1.7",
+        "tempy": "^0.7.1",
+        "tsx": "~4.20.3",
+        "typescript": "~5.8.3"
+    }
 }

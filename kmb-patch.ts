@@ -1,14 +1,14 @@
-const tempy = require('tempy');
-const {execSync} = require('child_process');
-const os = require('os');
-const fs = require('fs');
-const path = require('path');
-const axios = require('axios');
-const ProgressBar = require('progress');
-const extract = require("extract-zip");
-const cheerio = require('cheerio');
-const glob = require("glob");
-const tar = require('tar-stream');
+import * as tempy from 'tempy';
+import {execSync} from 'child_process';
+import os from 'os';
+import fs from 'fs';
+import path from 'path';
+import axios from 'axios';
+import ProgressBar from 'progress';
+import extract from "extract-zip";
+import cheerio from 'cheerio';
+import * as glob from "glob";
+import tar from 'tar-stream';
 
 /**
  * KMB Patch Class
@@ -26,10 +26,23 @@ export class KMBPatch {
     public keyPassword = "";
 
     public downloadJava = true;
-    public java = '"tools/jdk-11.0.8+10-jre/bin/java"';
+    public javaVersionMain = "21.0.8";
+    public javaVersionPlus = "9";
+    public javaFullName = `jdk-${this.javaVersionMain}+${this.javaVersionPlus}-jre`
+    public java = path.join("tools", this.javaFullName, "bin", "java");
 
+    public apkToolVersion = "2.12.0";
+    public apkToolFilename = `apktool_${this.apkToolVersion}.jar`;
+    public apkTool = path.join("tools", this.apkToolFilename);
 
-    constructor(inputAPK : string, outputAPK = "patched-kmb.apk", tempDir = "tmp") {
+    public uberApkSignerVersion = "1.3.0";
+    public uberApkSignerFilename = `uber-apk-signer-${this.uberApkSignerVersion}.jar`;
+    public uberApkSigner = path.join("tools", this.uberApkSignerFilename);
+
+    public abeFilename = "abe-62310d4.jar";
+    public abe = path.join("tools", this.abeFilename);
+
+    constructor(inputAPK : string, outputAPK = "patched-kmb.apk", tempDir = null) {
         this.mapKey = Buffer.from("QUl6YVN5QXR6Y2t0UzFfb1RBOHJ5dXBXdjFqcENCUXJZRjNHVVJr", 'base64').toString('utf8');
         this.keystorePassword = Buffer.from("Q25oUWJuZ3U4YUxGVlI2ckhHczZ6a29yeVpjSlZlREY=", 'base64').toString('utf8');
         this.keyPassword = this.keystorePassword;
@@ -84,13 +97,13 @@ export class KMBPatch {
             }
 
             console.log("Extracting APK");
-            let output : string = execSync(`${this.java} -Xmx512m -jar tools/apktool_2.4.1.jar d -o ${escapedTempDir} ${f} ${escapedInputAPK}`).toString();
+            let output : string = execSync(`${this.java} -Xmx512m -jar ${this.apkTool} d -o ${escapedTempDir} ${f} ${escapedInputAPK}`).toString();
             console.log(output);
 
             // Patch AndroidManifest.xml
             console.log("Patch AndroidManifest.xml");
             let xmlPath = this.tempDir + "/AndroidManifest.xml";
-            let androidManifestXML : string = fs.readFileSync(xmlPath);
+            let androidManifestXML : string = fs.readFileSync(xmlPath, "utf8");
             let $ = cheerio.load(androidManifestXML,  {
                 xmlMode: true
             });
@@ -250,12 +263,32 @@ export class KMBPatch {
                 }
             }
 
-            console.log("Build APK");
-            output = execSync(`${this.java} -Xmx512m -jar tools/apktool_2.4.1.jar b ${escapedTempDir} -o  ${escapedOutputAPK}`).toString();
+            // Patch building apk error
+            // https://github.com/iBotPeaches/Apktool/issues/2761
+            path = this.tempDir + "/res/values-v31/colors.xml";
+            fileList = glob.sync(path);
+
+            for (let i = 0; i < fileList.length; i++) {
+                // Replace all `@android` with `@*android`
+                let filename = fileList[i];
+                let text = fs.readFileSync(filename).toString();
+                console.log("Patch " + filename);
+                text = text.replaceAll("@android", "@*android");
+                fs.writeFileSync(filename, text);
+            }
+
+            console.log("Building the APK, this may take a while...");
+
+            // Prevent a strange error when building the APK
+            // https://stackoverflow.com/questions/23317208/apktool-build-apk-fails
+            execSync(`${this.java} -Xmx512m -jar ${this.apkTool} empty-framework-dir`);
+
+            // Do it now
+            output = execSync(`${this.java} -Xmx512m -jar ${this.apkTool} b ${escapedTempDir} -o  ${escapedOutputAPK}`).toString();
             console.log(output);
 
             console.log("Sign the APK");
-            output = execSync(`${this.java} -Xmx512m -jar tools/uber-apk-signer-1.1.0.jar -a ${escapedOutputAPK} --allowResign --overwrite --ks ${escapedSignKey} --ksPass ${escapedKeystonePassword} --ksAlias ${escapedKeyAlias} --ksKeyPass ${escapedKeyPassword}`).toString();
+            output = execSync(`${this.java} -Xmx512m -jar ${this.uberApkSigner} -a ${escapedOutputAPK} --allowResign --overwrite --ks ${escapedSignKey} --ksPass ${escapedKeystonePassword} --ksAlias ${escapedKeyAlias} --ksKeyPass ${escapedKeyPassword}`).toString();
             console.log(output);
 
             console.log("Patched successfully! The patch apk file located in " + this.outputAPK);
@@ -266,11 +299,7 @@ export class KMBPatch {
             exitCode = 1;
         }
 
-        if (fs.existsSync(this.tempDir)){
-            fs.rmSync(this.tempDir, {
-                recursive: true
-            });
-        }
+        this.cleanUp();
 
         return exitCode;
     }
@@ -279,25 +308,25 @@ export class KMBPatch {
      * Download all tools
      */
     async downloadTools() {
-        console.log("Download Tools");
+        console.log("Downloading Tools");
 
-        if (! fs.existsSync("tools/apktool_2.4.1.jar")) {
-            await this.downloadFile("https://github.com/iBotPeaches/Apktool/releases/download/v2.4.1/apktool_2.4.1.jar", "apktool_2.4.1.jar");
+        if (!fs.existsSync(this.apkTool)) {
+            await this.downloadFile(`https://github.com/iBotPeaches/Apktool/releases/download/v${this.apkToolVersion}/${this.apkToolFilename}`, this.apkToolFilename);
         }
 
-        if (! fs.existsSync("tools/uber-apk-signer-1.1.0.jar")) {
-            await this.downloadFile("https://github.com/patrickfav/uber-apk-signer/releases/download/v1.1.0/uber-apk-signer-1.1.0.jar", "uber-apk-signer-1.1.0.jar");
+        if (!fs.existsSync(this.uberApkSigner)) {
+            await this.downloadFile(`https://github.com/patrickfav/uber-apk-signer/releases/download/v${this.uberApkSignerVersion}/${this.uberApkSignerFilename}`, this.uberApkSignerFilename);
         }
 
-        if (! fs.existsSync("tools/abe.jar")) {
-            await this.downloadFile("https://github.com/nelenkov/android-backup-extractor/releases/download/20181012025725-d750899/abe-all.jar", "abe.jar")
+        if (!fs.existsSync(this.abe)) {
+            await this.downloadFile(`https://github.com/nelenkov/android-backup-extractor/releases/download/latest/${this.abeFilename}`, this.abeFilename)
         }
 
         // JRE Download link from https://adoptopenjdk.net/archive.html
-        if (this.downloadJava && ! fs.existsSync("tools/jdk-11.0.8+10-jre")) {
-            await this.downloadFile("https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11.0.8%2B10/OpenJDK11U-jre_x64_windows_hotspot_11.0.8_10.zip", "jre.zip");
-
-            await extract("tools/jre.zip", {
+        if (this.downloadJava && !fs.existsSync(path.join("tools", this.javaFullName))) {
+            const javaZipFilename = `${this.javaFullName}.zip`;
+            await this.downloadFile(`https://github.com/adoptium/temurin21-binaries/releases/download/jdk-${this.javaVersionMain}%2B${this.javaVersionPlus}/OpenJDK21U-jre_x64_windows_hotspot_${this.javaVersionMain}_${this.javaVersionPlus}.zip`, javaZipFilename);
+            await extract(path.join("tools", javaZipFilename), {
                 dir: path.resolve("tools")
             });
         }
@@ -325,7 +354,7 @@ export class KMBPatch {
             total: totalLength
         });
 
-        const writer = fs.createWriteStream(path.resolve(__dirname, 'tools', filename));
+        const writer = fs.createWriteStream(path.join("tools", filename));
 
         data.on('data', (chunk) => {
             progressBar.tick(chunk.length);
@@ -359,12 +388,12 @@ export class KMBPatch {
             }
 
             if (! fs.existsSync("appdata.ab")) {
-                throw "appdata.ab not found";
+                throw new Error("appdata.ab not found");
             }
 
             console.log("Patching backup")
 
-            execSync(`${this.java} -jar tools/abe.jar unpack appdata.ab tmp/appdata.tar`);
+            execSync(`${this.java} -jar ${this.abe} unpack appdata.ab tmp/appdata.tar`);
 
             // Stream is fun
             // oldTarballStream -> extract (Stream) -> only replace "_manifest" -> pack (Stream) -> newTarballStream
@@ -400,7 +429,7 @@ export class KMBPatch {
                 pack.pipe(newTarballStream);
             });
 
-            execSync(`${this.java} -jar tools/abe.jar pack tmp/patched-appdata.tar patched-appdata.ab`);
+            execSync(`${this.java} -jar ${this.abe} pack tmp/patched-appdata.tar patched-appdata.ab`);
 
             console.log("Connect your phone to your PC and accept restore");
             execSync(`adb restore patched-appdata.ab`);
@@ -412,10 +441,19 @@ export class KMBPatch {
 
         return 0;
     }
+
+    cleanUp() {
+        console.log("Cleaning up temp files");
+        if (fs.existsSync(this.tempDir)){
+            fs.rmSync(this.tempDir, {
+                recursive: true
+            });
+        }
+    }
 }
 
 function escapeShellArg(arg) {
-    let quote;
+    let quote: string;
 
     if (os.platform() == 'win32') {
         quote = '"';

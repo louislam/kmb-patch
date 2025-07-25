@@ -44,8 +44,10 @@
 2. 下載這個程式 https://github.com/louislam/kmb-patch/archive/2.0.0.zip ，並解壓縮。
 3. 進入資料夾，執行 `0-Setup.bat` 或 `npm install` 。
 4. (非必要 ADB) 如需要備份 Bookmark 等資料，可先把 Android 手機連接到 PC，再執行 `1-BackupAppData.bat` 。
-5. 匯出原版 APK，或到可信的網站下載，例如 https://apkpure.com/app-1933-kmb-lwb/com.kmb.app1933 ，把檔案命名為 `kmb.apk`，然後放到同一資料夾下。
-6. 執行 `2-Patch.bat`，成功後，會生成 `patched-kmb.apk` 。
+5. 使用 [AntiSplit-M](https://github.com/AbdurazaaqMohammed/AntiSplit-M/releases/tag/2.2.6) 匯出原版 APK 
+   1. 或者到可信的網站下載 APKX，例如 [APKPure](https://apkpure.com/app-1933-kmb-lwb/com.kmb.app1933)，然後再用 AntiSplit-M 轉換成 APK。
+7. 把檔案命名為 `kmb.apk`，然後放到同一資料夾下。
+8. 執行 `2-Patch.bat`，成功後，會生成 `patched-kmb.apk` 。
 7. 喺你部 Android 機刪除原版 KMB App 。
 8. 用你鍾意嘅方法，將 `patched-kmb.apk` 放入你部 Android 機，然後安裝。
 9. (非必要 ADB) 如要恢復備份，可執行 `4-RestoreAppData.bat`。
